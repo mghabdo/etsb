@@ -1,0 +1,125 @@
+tags:
+- name: products
+  description: products API
+
+paths:
+# [GET] products
+  /products:
+    get:
+      tags:
+      - products
+      summary: Find All Products
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+# [POST] products
+    post:
+      tags:
+      - products
+      summary: Add Product
+      parameters:
+      - name: body
+        in: body
+        description: product Data
+        required: true
+        schema:
+          $ref: '#/definitions/products'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [GET] products/id
+  /products/{id}:
+    get:
+      tags:
+      - products
+      summary: Find Product By Id
+      parameters:
+      - name: id
+        in: path
+        description: Product Id
+        required: true
+        type: integer
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [PUT] products/id
+    put:
+      tags:
+      - products
+      summary: Update Product By Id
+      parameters:
+      - name: id
+        in: path
+        description: product Id
+        required: true
+        type: integer
+      - name: body
+        in: body
+        description: product Data
+        required: true
+        schema:
+          $ref: '#/definitions/products'
+      responses:
+        200:
+          description: 'OK'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [DELETE] products/id
+    delete:
+      tags:
+      - products
+      summary: Delete Product By Id
+      parameters:
+      - name: id
+        in: path
+        description: product Id
+        required: true
+        type: integer
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# definitions
+definitions:
+  products:
+    type: object
+    required:
+        - name
+    properties:
+      name:
+        type: string
+        description: product name
+      description:
+        type: string
+        description: product description
+      category:
+        type: string
+        description: product category
+
+schemes:
+ - https
+ - http
