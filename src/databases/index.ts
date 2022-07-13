@@ -5,21 +5,13 @@ import ProductModel from '@models/products.model';
 import PersonModel from '@models/persons.model';
 import CategoryModel from '@models/categories.model';
 import { logger } from '@utils/logger';
-
-const sequelize = new Sequelize.Sequelize(DB_DATABASE, DB_USER, DB_PASSWORD, {
-  dialect: 'mysql',
-  host: DB_HOST,
-  port: Number(DB_PORT),
-  timezone: '+09:00',
-  define: {
-    charset: 'utf8mb4',
-    collate: 'utf8mb4_general_ci',
-    underscored: true,
-    freezeTableName: true,
-  },
+const pg = require('pg');
+const sequelize = new Sequelize.Sequelize('postgres://postgres:postgres@127.0.0.1:5432/etsb', {
   pool: {
-    min: 0,
     max: 5,
+    min: 0,
+    acquire: 30000,
+    idle: 10000,
   },
   logQueryParameters: NODE_ENV === 'development',
   logging: (query, time) => {
@@ -28,7 +20,14 @@ const sequelize = new Sequelize.Sequelize(DB_DATABASE, DB_USER, DB_PASSWORD, {
   benchmark: true,
 });
 
-sequelize.authenticate();
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log('_____connecting ....');
+  })
+  .catch(err => {
+    console.log('____ERROR', err);
+  });
 
 const DB = {
   Users: UserModel(sequelize),
